@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* 1. THEME TOKENS 
+   Prefixing with --color-* and --spacing-* allows Tailwind v4 
+   to automatically generate classes like `bg-background`, `text-ink`, or `px-pad`. */
+@theme {
+  --color-background: #F6F5F2;
+  --color-ink: #141412;
+  --color-body: #3C3B37;
+  --color-muted: #75736D;
+  --color-line: rgba(20, 20, 18, 0.14);
+  --color-bone: #ECEAE3;
+  --color-gray: #DEDDD8;
+  --color-accent: #E8401C;
+
+  --spacing-nav-h: 64px;
+  --spacing-bar-h: 56px;
+  --spacing-pad: clamp(16px, 4vw, 56px);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* 2. BASE STYLES
+   HTML tag resets, pseudo-selectors, and responsive CSS variables. */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Mapping your custom tokens back to the raw variables so your 
+       existing React components using `var(--background)` etc., don't break. */
+    --background: var(--color-background);
+    --ink: var(--color-ink);
+    --body: var(--color-body);
+    --muted: var(--color-muted);
+    --line: var(--color-line);
+    --bone: var(--color-bone);
+    --gray: var(--color-gray);
+    --accent: var(--color-accent);
+    
+    --pad: var(--spacing-pad);
+    --nav-h: var(--spacing-nav-h);
+    --bar-h: var(--spacing-bar-h);
+  }
+
+  @media (max-width: 640px) {
+    :root { 
+      --nav-h: 56px; 
+      --bar-h: 48px; 
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-h) + 12px);
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--background);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 3. UTILITY CLASSES
+   Custom classes and attributes used specifically for styling/JS states. */
+@layer utilities {
+  .t-paper { --card-bg: var(--background);   --card-ink: var(--ink); --card-line: rgba(20,20,18,.16);  --card-mut: #6E6C66; }
+  .t-bone  { --card-bg: var(--bone); --card-ink: var(--ink); --card-line: rgba(20,20,18,.16);  --card-mut: #6E6C66; }
+  .t-ink   { --card-bg: #161513;     --card-ink: #F2F1EC;    --card-line: rgba(242,241,236,.22); --card-mut: #A09E93; }
+  .t-gray  { --card-bg: var(--gray); --card-ink: var(--ink); --card-line: rgba(20,20,18,.18);  --card-mut: #6E6C66; }
+
+  /* GSAP Initial state to prevent flash before animation */
+  [data-reveal] {
+    visibility: hidden;
+  }
 }

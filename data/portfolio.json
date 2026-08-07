@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "handle": "@nanand_r",
+    "email_display": "rafirenan12(at)gmail(dot)com",
+    "email": "rafirenan12@gmail.com",
+    "location": "Bandung, Indonesia",
+    "timezone": "Asia/Jakarta",
+    "availability": "Open to opportunities"
+  },
+  "nav": [
+    { "label": "About", "href": "#about" },
+    { "label": "Work", "href": "#projects" },
+    { "label": "Stack", "href": "#stack" },
+    { "label": "Contact", "href": "#contact" }
+  ],
+  "hero": {
+    "role": "Software Engineer"
+  },
+  "about": {
+    "label": "01 / About",
+    "title": "Hello",
+    "body": [
+      "My name is Nandana Rafi Ardika",
+      "I'm a full-stack web developer and software engineering student based in Indonesia, I build modern web applications with a focus on creating practical solutions.",
+      "Outside of web development, I'm also learning game development and machine learning."
+    ],
+    "portraitCaption": ["me.jpg"],
+    "journeyTitle": "Journey so far",
+    "journey": [
+      {
+        "year": "2026",
+        "roles": [
+          { "title": "Fullstack Engineer Intern", "org": "Urbansolv", "note": "Developed features, accessibility, and responsive layout for a client's business management platform."  },
+          { "title": "Teaching Assistant", "org": "Universitas Pendidikan Indonesia", "note": "Assisting lecturers in Software Requirement courses, involved in research on computational thinking learning modules for primary school." }
+        ],
+        "image": "https://ik.imagekit.io/nanandr/portfolio/110846.jpg"
+      },
+      {
+        "year": "2025",
+        "roles": [
+          { "title": "Teaching Assistant", "org": "Universitas Pendidikan Indonesia", "note": "Assisting lecturers in introductory Software Engineering courses." }
+        ],
+        "image": "https://ik.imagekit.io/nanandr/portfolio/110800.jpg"
+      },
+      {
+        "year": "2024",
+        "roles": [
+          { "title": "Backend Engineer Intern", "org": "PT Safanesia Grup Indonesia", "note": "Developed a Wi-Fi management web application using Laravel and jQuery." }
+        ],
+        "image": "https://ik.imagekit.io/nanandr/portfolio/111041.jpg"
+      }
+    ]
+  },
+  "projects": {
+    "label": "02 / Selected Work",
+    "title": "Projects",
+    "hint": "",
+    "seeAll": { "label": "View all projects", "url": "#" },
+    "list": [
+    {
+      "name": "Tokoku",
+      "year": "2026",
+      "type": "Community Tech",
+      "theme": "paper",
+      "description": "Booth management system that helps event organizers and tenants manage products, sales, and booth operations from a single platform.",
+      "note": "Built to simplify event commerce and vendor management.",
+      "tags": ["Laravel", "Inertia.js", "MySQL"],
+      "link": "#",
+      "image": "https://ik.imagekit.io/nanandr/portfolio/tokoku.jpeg"
+    },
+    {
+      "name": "Village Digital Services Platform",
+      "year": "2025",
+      "type": "Government Tech",
+      "theme": "paper",
+      "description": "Web application for village officials to manage legal documents, digitalize local business records, and streamline public services.",
+      "note": "Designed to modernize administrative workflows for local government.",
+      "tags": ["Laravel", "MySQL"],
+      "link": "#",
+      "image": "https://ik.imagekit.io/nanandr/portfolio/desa.png"
+    },
+    {
+      "name": "WiFi Billing",
+      "year": "2024",
+      "type": "Network Management",
+      "theme": "paper",
+      "description": "Wi-Fi billing and management system that streamlines ISP operations, including customer subscriptions, router integration, and network administration.",
+      "note": "Built to automate day-to-day ISP management tasks.",
+      "tags": ["Laravel", "jQuery", "MySQL"],
+      "link": "#",
+      "image": "https://ik.imagekit.io/nanandr/portfolio/deltabill.png"
+    }
+  ]
+  },
+  "stack": {
+    "label": "03 / Tools",
+    "title": "Tech Stack",
+    "items": [
+      {"abbr": "Nx", "name": "NextJS"},
+      {"abbr": "Rc", "name": "React"},
+      { "abbr": "Lr", "name": "Laravel" },
+      { "abbr": "Sb", "name": "Supabase" },
+      { "abbr": "SQL", "name": "MySQL" },
+      { "abbr": "Tw", "name": "Tailwind" }
+    ]
+  },
+  "contact": {
+    "label": "04 / Contact",
+    "kicker": "Have something in your mind?",
+    "title": "Let's chat"
+  },
+  "socials": [
+    { "label": "GitHub", "url": "https://github.com/nanandr" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/nandana-rafi-ardika/" },
+    { "label": "X", "url": "https://twitter.com/nanand_r" },
+    { "label": "Instagram", "url": "https://instagram.com/nanand_real" }
+  ],
+  "images": {
+    "avatar": "https://ik.imagekit.io/nanandr/portfolio/avatar.png",
+    "portrait": "https://ik.imagekit.io/nanandr/portfolio/portrait.jpg"
+  }
+}
