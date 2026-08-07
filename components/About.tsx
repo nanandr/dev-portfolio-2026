@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import siteData from "@/data/portfolio.json";
+import { PortfolioData } from "@/types/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,7 +87,7 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
   );
 }
 
-export default function About() {
+export default function About({ data }: { data: PortfolioData }) {
   const [showAll, setShowAll] = useState(false);
   const [needsExpansion, setNeedsExpansion] = useState(false);
   
@@ -146,15 +146,15 @@ export default function About() {
   return (
     <section id="about" className="py-20 lg:py-28 px-6 lg:px-14 w-full">
       <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-muted before:content-[''] before:w-6 before:h-px before:bg-accent" data-reveal>
-        {siteData.about.label}
+        {data.about.label}
       </div>
       
       <div className="flex flex-col md:flex-row justify-between gap-10 lg:gap-16 items-start mt-10">
         <div className="text-ink">
           <h2 className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none text-4xl md:text-6xl mt-4 mb-6" data-reveal>
-            {siteData.about.title}
+            {data.about.title}
           </h2>
-          {siteData.about.body.map((p, i) => (
+          {data.about.body.map((p, i) => (
             <p key={i} className="max-w-[54ch] text-body mb-4 text-base md:text-lg leading-relaxed" data-reveal dangerouslySetInnerHTML={{ __html: p }} />
           ))}
         </div>
@@ -162,20 +162,20 @@ export default function About() {
         <figure ref={portraitRef} className="bg-gray p-3 w-full md:w-auto shrink-0 overflow-hidden" data-reveal>
           <img 
             ref={portraitImgRef}
-            src={siteData.images.portrait} 
+            src={data.images.portrait} 
             alt="Portrait" 
             className="w-full md:max-w-xs aspect-3/4 object-cover"
           />
           <figcaption className="flex justify-between gap-3 pt-2.5 text-[10.5px] tracking-[0.12em] uppercase text-muted">
-            <span>{siteData.about.portraitCaption[0]}</span>
-            <span>{siteData.about.portraitCaption[1]}</span>
+            <span>{data.about.portraitCaption[0]}</span>
+            <span>{data.about.portraitCaption[1]}</span>
           </figcaption>
         </figure>
       </div>
 
       <div className="mt-20 lg:mt-32 relative">
         <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-muted before:content-[''] before:w-6 before:h-px before:bg-accent" data-reveal>
-          {siteData.about.journeyTitle}
+          {data.about.journeyTitle}
         </div>
         
         <div 
@@ -184,7 +184,7 @@ export default function About() {
             !showAll && needsExpansion ? "max-h-[520px]" : "max-h-[8000px]"
           }`}
         >
-          {siteData.about.journey.map((j, i) => (
+          {data.about.journey.map((j, i) => (
             <JourneyRow 
               key={i} 
               j={j} 

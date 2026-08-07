@@ -1,22 +1,23 @@
-import siteData from "@/data/portfolio.json";
+
+import { PortfolioData } from "@/types/portfolio";
 import { SquareArrowOutUpRight } from "lucide-react";
 
-export default function Projects() {
-  const listLength = siteData.projects.list.length;
+export default function Projects({ data }: { data: PortfolioData }) {
+  const listLength = data.projects.list.length;
 
   return (
     <section id="projects" className="py-24">
       <div className="px-6 lg:px-14 flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 relative z-50 bg-background">
         <div>
           <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-muted before:content-[''] before:w-6 before:h-px before:bg-accent" data-reveal>
-            {siteData.projects.label}
+            {data.projects.label}
           </div>
           <h2 className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none text-4xl md:text-6xl mt-4 text-ink" data-reveal>
-            {siteData.projects.title}
+            {data.projects.title}
           </h2>
         </div>
         <div className="text-[11px] tracking-[0.16em] uppercase text-muted whitespace-nowrap pb-2">
-          {siteData.projects.hint}
+          {data.projects.hint}
         </div>
       </div>
 
@@ -24,7 +25,7 @@ export default function Projects() {
       <div className="relative">
         
         {/* Regular Project Cards */}
-        {siteData.projects.list.map((p, idx) => (
+        {data.projects.list.map((p, idx) => (
           <article
             key={idx}
             className={`sticky bg-[var(--card-bg)] text-[var(--card-ink)] border-t border-[var(--card-ink)] t-${p.theme}`}
@@ -96,9 +97,9 @@ export default function Projects() {
               0{listLength + 1}
             </span>
             <h3 className="font-semibold tracking-wide uppercase text-sm md:text-base">
-              {siteData.projects.seeAll.label}
+              {data.projects.seeAll.label}
             </h3>
-            <a href={siteData.projects.seeAll.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 px-4 transition-colors hover:bg-ink hover:text-background group">
+            <a href={data.projects.seeAll.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 py-2 px-4 transition-colors hover:bg-ink hover:text-background group">
               <SquareArrowOutUpRight size={12}/>
             </a>
           </div>

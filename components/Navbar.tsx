@@ -1,8 +1,9 @@
 "use client";
+import { PortfolioData } from "@/types/portfolio";
 import { useEffect, useState } from "react";
-import siteData from "@/data/portfolio.json";
 
-export default function Navbar() {
+
+export default function Navbar({ data }: { data: PortfolioData }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -18,11 +19,11 @@ export default function Navbar() {
       }`}
     >
       <a href="/" className="flex items-center gap-2.5 text-inherit no-underline">
-        <img src={siteData.images.avatar} className="w-8 h-8 object-contain" />
+        <img src={data.images.avatar} className="w-8 h-8 object-contain" />
       </a>
       <nav>
         <ul className="flex gap-4 md:gap-8 list-none">
-          {siteData.nav.map((item, idx) => (
+          {data.nav.map((item, idx) => (
             <li key={idx}>
               <a
                 href={item.href}
