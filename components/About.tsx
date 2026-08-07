@@ -9,14 +9,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 function JourneyRow({ j, i }: { j: any, i: number }) {
   const rowRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
+  // Add this ref at the top of your component
+  const overlayRef = useRef(null);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       // 1. Set Initial States
-      // clipPath: inset(top right bottom left). Start with the bottom edge pulled 100% up (completely hidden)
-      gsap.set(imgRef.current, { clipPath: "inset(0% 0% 100% 0%)" });
+      // The overlay starts fully visible (inset 0), making the image grayscale
+      gsap.set(overlayRef.current, { clipPath: "inset(0% 0% 0% 0%)" });
       gsap.set(yearRef.current, { color: "var(--ink)" });
 
       // 2. Create directional ScrollTrigger
@@ -24,25 +25,35 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
         trigger: rowRef.current,
         start: "top 55%",
         end: "bottom 45%",
-        // SCROLLING DOWN: Wipe down to reveal
+        
+        // SCROLLING DOWN INTO CENTER: Wipe overlay down to reveal color
         onEnter: () => {
           gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(imgRef.current, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
+          gsap.to(overlayRef.current, { clipPath: "inset(100% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
         },
-        // SCROLLING DOWN PAST IT: Continue wiping down to hide (pull the top edge 100% down)
+        
+        // SCROLLING DOWN PAST CENTER: Wipe overlay down to cover image in grayscale again
         onLeave: () => {
           gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(imgRef.current, { clipPath: "inset(100% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
+          gsap.fromTo(overlayRef.current, 
+            { clipPath: "inset(0% 0% 100% 0%)" }, 
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true }
+          );
         },
-        // SCROLLING UP BACK TO IT: Wipe up to reveal
+        
+        // SCROLLING UP BACK INTO CENTER: Wipe overlay up to reveal color
         onEnterBack: () => {
           gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(imgRef.current, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
+          gsap.to(overlayRef.current, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
         },
-        // SCROLLING UP PAST IT: Continue wiping up to hide (pull the bottom edge 100% up)
+        
+        // SCROLLING UP PAST CENTER: Wipe overlay up to cover image in grayscale again
         onLeaveBack: () => {
           gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(imgRef.current, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
+          gsap.fromTo(overlayRef.current, 
+            { clipPath: "inset(100% 0% 0% 0%)" }, 
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true }
+          );
         }
       });
     }, rowRef);
@@ -75,12 +86,18 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
         </div>
       </div>
 
-      <div className="w-full h-full min-h-62.5 relative overflow-hidden bg-background">
-        <img 
-          ref={imgRef}
+      <div className="w-full h-full min-h-[250px] relative overflow-hidden bg-background">
+        {/* Base Image (Always fully visible, always in color) */}
+        <img
           src={j.image} 
           alt={`Experience in ${j.year}`}
           className="absolute inset-0 w-full h-full object-cover"
+        />
+        
+        {/* Grayscale Overlay controlled by GSAP */}
+        <div 
+          ref={overlayRef}
+          className="absolute inset-0 bg-white/50 backdrop-grayscale z-10 pointer-events-none" 
         />
       </div>
     </div>
@@ -181,7 +198,7 @@ export default function About({ data }: { data: PortfolioData }) {
         <div 
           ref={contentRef}
           className={`mt-8 border-t border-line relative overflow-hidden transition-[max-height] duration-700 ease-in-out ${
-            !showAll && needsExpansion ? "max-h-[520px]" : "max-h-[8000px]"
+            !showAll && needsExpansion ? "max-h-130" : "max-h-[8000px]"
           }`}
         >
           {data.about.journey.map((j, i) => (

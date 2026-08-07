@@ -14,7 +14,7 @@ export type PortfolioData = {
   }[];
 
   hero: {
-    role: string;
+    role: string[];
   };
 
   about: {
