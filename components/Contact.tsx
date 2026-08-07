@@ -29,7 +29,6 @@ export default function Contact({ data }: { data: PortfolioData }) {
       <button 
         onClick={handleCopy} 
         className="flex items-center gap-6 md:gap-10 mt-10 md:mt-16 w-max max-w-full group cursor-pointer text-left appearance-none bg-transparent border-none p-0" 
-        data-reveal
       >
         <span className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none uppercase text-5xl md:text-7xl lg:text-8xl text-ink transition-colors group-hover:text-accent">
           {data.contact.title}
@@ -44,7 +43,6 @@ export default function Contact({ data }: { data: PortfolioData }) {
           onClick={handleCopy} 
           className="text-ink hover:underline cursor-pointer appearance-none bg-transparent border-none p-0"
         >
-          {/* @ts-ignore */}
           {data.meta.email_display || data.meta.email}
         </button>
       </p>
