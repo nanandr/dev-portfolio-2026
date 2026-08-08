@@ -10,13 +10,11 @@ gsap.registerPlugin(ScrollTrigger);
 function JourneyRow({ j, i }: { j: any, i: number }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const yearRef = useRef<HTMLDivElement>(null);
-  // Add this ref at the top of your component
   const overlayRef = useRef(null);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       // 1. Set Initial States
-      // The overlay starts fully visible (inset 0), making the image grayscale
       gsap.set(overlayRef.current, { clipPath: "inset(0% 0% 0% 0%)" });
       gsap.set(yearRef.current, { color: "var(--ink)" });
 
@@ -26,13 +24,13 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
         start: "top 55%",
         end: "bottom 45%",
         
-        // SCROLLING DOWN INTO CENTER: Wipe overlay down to reveal color
+        // SCROLLING DOWN INTO CENTER
         onEnter: () => {
           gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
           gsap.to(overlayRef.current, { clipPath: "inset(100% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
         },
         
-        // SCROLLING DOWN PAST CENTER: Wipe overlay down to cover image in grayscale again
+        // SCROLLING DOWN PAST CENTER
         onLeave: () => {
           gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
           gsap.fromTo(overlayRef.current, 
@@ -41,13 +39,13 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
           );
         },
         
-        // SCROLLING UP BACK INTO CENTER: Wipe overlay up to reveal color
+        // SCROLLING UP BACK INTO CENTER
         onEnterBack: () => {
           gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
           gsap.to(overlayRef.current, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
         },
         
-        // SCROLLING UP PAST CENTER: Wipe overlay up to cover image in grayscale again
+        // SCROLLING UP PAST CENTER
         onLeaveBack: () => {
           gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
           gsap.fromTo(overlayRef.current, 
@@ -87,14 +85,11 @@ function JourneyRow({ j, i }: { j: any, i: number }) {
       </div>
 
       <div className="w-full h-full min-h-[250px] relative overflow-hidden bg-background">
-        {/* Base Image (Always fully visible, always in color) */}
         <img
           src={j.image} 
           alt={`Experience in ${j.year}`}
           className="absolute inset-0 w-full h-full object-cover"
         />
-        
-        {/* Grayscale Overlay controlled by GSAP */}
         <div 
           ref={overlayRef}
           className="absolute inset-0 bg-white/50 backdrop-grayscale z-10 pointer-events-none" 
@@ -167,13 +162,28 @@ export default function About({ data }: { data: PortfolioData }) {
       </div>
       
       <div className="flex flex-col md:flex-row justify-between gap-10 lg:gap-16 items-start mt-10">
-        <div className="text-ink">
+        <div className="text-ink flex-1">
           <h2 className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none text-4xl md:text-6xl mt-4 mb-6" data-reveal>
             {data.about.title}
           </h2>
           {data.about.body.map((p, i) => (
             <p key={i} className="max-w-[54ch] text-body mb-4 text-base md:text-lg leading-relaxed" data-reveal dangerouslySetInnerHTML={{ __html: p }} />
           ))}
+
+          {/* Social Links Buttons */}
+          <div className="flex flex-wrap gap-4 mt-8" data-reveal>
+            {data.socials.map((s, i) => (
+              <a 
+                key={i} 
+                href={s.url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="border border-line text-ink px-4 py-2 text-[11px] tracking-[0.16em] uppercase font-semibold transition-colors hover:bg-ink hover:text-background hover:border-ink flex items-center gap-1.5"
+              >
+                {s.label} <span className="font-normal text-[10px]">↗</span>
+              </a>
+            ))}
+          </div>
         </div>
         
         <figure ref={portraitRef} className="bg-gray p-3 w-full md:w-auto shrink-0 overflow-hidden" data-reveal>
