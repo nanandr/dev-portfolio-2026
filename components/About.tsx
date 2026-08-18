@@ -7,245 +7,193 @@ import { PortfolioData } from "@/types/portfolio";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function JourneyRow({ j, i }: { j: any, i: number }) {
-  const rowRef = useRef<HTMLDivElement>(null);
-  const yearRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef(null);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      // 1. Set Initial States
-      gsap.set(overlayRef.current, { clipPath: "inset(0% 0% 0% 0%)" });
-      gsap.set(yearRef.current, { color: "var(--ink)" });
-
-      // 2. Create directional ScrollTrigger
-      ScrollTrigger.create({
-        trigger: rowRef.current,
-        start: "top 55%",
-        end: "bottom 45%",
-        
-        // SCROLLING DOWN INTO CENTER
-        onEnter: () => {
-          gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(overlayRef.current, { clipPath: "inset(100% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
-        },
-        
-        // SCROLLING DOWN PAST CENTER
-        onLeave: () => {
-          gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.fromTo(overlayRef.current, 
-            { clipPath: "inset(0% 0% 100% 0%)" }, 
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true }
-          );
-        },
-        
-        // SCROLLING UP BACK INTO CENTER
-        onEnterBack: () => {
-          gsap.to(yearRef.current, { color: "var(--accent)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.to(overlayRef.current, { clipPath: "inset(0% 0% 100% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true });
-        },
-        
-        // SCROLLING UP PAST CENTER
-        onLeaveBack: () => {
-          gsap.to(yearRef.current, { color: "var(--ink)", duration: 0.6, ease: "power2.out", overwrite: true });
-          gsap.fromTo(overlayRef.current, 
-            { clipPath: "inset(100% 0% 0% 0%)" }, 
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut", overwrite: true }
-          );
-        }
-      });
-    }, rowRef);
-
-    return () => ctx.revert();
-  }, []);
-
+// ─── JOURNEY EDITORIAL VIEW ────────────────────────────────────────────────
+function JourneyView({ data }: { data: PortfolioData }) {
   return (
-    <div 
-      ref={rowRef}
-      className="grid grid-cols-1 md:grid-cols-2 gap-0 border-b border-line items-stretch group" 
-      {...(i < 2 ? { "data-reveal": true } : {})}
-    >
-      <div className="flex flex-col sm:flex-row gap-4 md:gap-6 items-start py-8 md:py-12 pr-4 md:pr-10 text-ink">
+    <div className="flex flex-col border-t border-line animate-in fade-in duration-700 w-full">
+      {data.about.journey.map((j, i) => (
         <div 
-          ref={yearRef} 
-          className="font-[IBM_Plex_Mono] text-2xl md:text-4xl font-bold tracking-tight w-25 lg:w-39 shrink-0 transition-colors"
+          key={i} 
+          // Switched to a strict grid to enforce equal widths and eliminate empty space
+          className="group grid grid-cols-1 md:grid-cols-[120px_1fr_250px] lg:grid-cols-[150px_1fr_320px] gap-6 lg:gap-10 border-b border-line items-stretch w-full transition-colors"
         >
-          {j.year}
-        </div>
-        <div className="flex flex-col gap-6">
-          {j.roles.map((r: any, idx: number) => (
-            <div key={idx} className="flex flex-col gap-1.5 transition-opacity duration-300">
-              <div className="font-semibold text-[1.05rem]">
-                <span>{r.title}</span> <span className="text-muted font-normal">@ {r.org}</span>
+          {/* Year - added group-hover to highlight with primary/accent color */}
+          <div className="font-[IBM_Plex_Mono] py-8 text-2xl md:text-3xl font-bold tracking-tight text-ink transition-colors duration-300 group-hover:text-accent mt-0 md:mt-1">
+            {j.year}
+          </div>
+          
+          {/* Roles */}
+          <div className="flex flex-col gap-8 w-full py-8 pr-0 md:pr-6">
+            {j.roles.map((r: any, idx: number) => (
+              <div key={idx} className="flex flex-col gap-2 items-start">
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-semibold text-lg text-ink">{r.title}</h3>
+                  <span className="text-[11px] tracking-[0.12em] uppercase text-muted font-medium">
+                    {r.org}
+                  </span>
+                </div>
+                {/* Removed max-width constraint so text flows better within the grid */}
+                <div className="text-body text-[0.95rem] leading-relaxed w-full">
+                  {r.note}
+                </div>
               </div>
-              <div className="text-body text-[0.9rem] max-w-[42ch]">{r.note}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
 
-      <div className="w-full h-full min-h-[250px] relative overflow-hidden bg-background">
-        <img
-          src={j.image} 
-          alt={`Experience in ${j.year}`}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        <div 
-          ref={overlayRef}
-          className="absolute inset-0 bg-white/50 backdrop-grayscale z-10 pointer-events-none" 
-        />
-      </div>
+          {/* Journey Image - stretches to fill row height perfectly */}
+          {j.image && (
+            <div className="w-full h-[200px] md:h-full min-h-[160px] relative overflow-hidden border border-line bg-bone mt-4 md:mt-0">
+              <img
+                src={j.image}
+                alt={`Experience in ${j.year}`}
+                className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 ease-out"
+              />
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
 
+// ─── MAIN ABOUT COMPONENT ──────────────────────────────────────────────────
 export default function About({ data }: { data: PortfolioData }) {
-  const [showAll, setShowAll] = useState(false);
-  const [needsExpansion, setNeedsExpansion] = useState(false);
+  const [activeTab, setActiveTab] = useState<'about' | 'journey'>('about');
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
-  const contentRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLElement>(null);
   const portraitImgRef = useRef<HTMLImageElement>(null);
 
-  useEffect(() => {
-    const checkHeight = () => {
-      if (contentRef.current && contentRef.current.scrollHeight > 520) {
-        setNeedsExpansion(true);
-      } else {
-        setNeedsExpansion(false);
-      }
-    };
-
-    const timer = setTimeout(checkHeight, 150);
-    window.addEventListener("resize", checkHeight);
+  // Handle Tab Switch with subtle fade
+  const handleTabChange = (tab: 'about' | 'journey') => {
+    if (tab === activeTab) return;
+    setIsTransitioning(true);
     
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", checkHeight);
-    };
-  }, []);
+    setTimeout(() => {
+      setActiveTab(tab);
+      setIsTransitioning(false);
+      // Refresh ScrollTrigger after DOM changes so GSAP recalculates heights
+      setTimeout(() => ScrollTrigger.refresh(), 100);
+    }, 300);
+  };
 
+  // Portrait Reveal Animation
   useEffect(() => {
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 750); 
-    return () => clearTimeout(timer);
-  }, [showAll]);
-
-  useEffect(() => {
-    let ctx = gsap.context(() => {
-      gsap.fromTo(
-        portraitImgRef.current,
-        { filter: "blur(24px)", opacity: 0.6 },
-        {
-          filter: "blur(0px)",
-          opacity: 1,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: portraitRef.current,
-            start: "top 75%",
-            end: "bottom 25%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
-    }, portraitRef);
-
-    return () => ctx.revert();
-  }, []);
+    if (activeTab === 'about' && portraitRef.current && portraitImgRef.current) {
+      let ctx = gsap.context(() => {
+        gsap.fromTo(
+          portraitImgRef.current,
+          { filter: "blur(12px)", opacity: 0 },
+          {
+            filter: "blur(0px)",
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out",
+            clearProps: "all" 
+          }
+        );
+      }, portraitRef);
+      return () => ctx.revert();
+    }
+  }, [activeTab, isTransitioning]);
 
   return (
-    <section id="about" className="py-20 lg:py-28 px-6 lg:px-14 w-full">
-      <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-muted before:content-[''] before:w-6 before:h-px before:bg-accent" data-reveal>
+    <section id="about" className="py-20 lg:py-28 px-6 lg:px-14 w-full flex flex-col">
+      <div className="flex items-center gap-2.5 text-[11px] pb-8 tracking-[0.18em] uppercase text-[var(--muted)] before:content-[''] before:w-6 before:h-[1px] before:bg-[var(--accent)]" data-reveal>
         {data.about.label}
       </div>
-      
-      <div className="flex flex-col md:flex-row justify-between gap-10 lg:gap-16 items-start mt-10">
-        <div className="text-ink flex-1">
-          <h2 className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none text-4xl md:text-6xl mt-4 mb-6" data-reveal>
-            {data.about.title}
-          </h2>
-          {data.about.body.map((p, i) => (
-            <p key={i} className="max-w-[54ch] text-body mb-4 text-base md:text-lg leading-relaxed" data-reveal dangerouslySetInnerHTML={{ __html: p }} />
-          ))}
-
-          {/* Social Links Buttons */}
-          <div className="flex flex-wrap gap-4 mt-8" data-reveal>
-            {data.socials.map((s, i) => (
-              <a 
-                key={i} 
-                href={s.url} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="border border-line text-ink px-4 py-2 text-[11px] tracking-[0.16em] uppercase font-semibold transition-colors hover:bg-ink hover:text-background hover:border-ink flex items-center gap-1.5"
-              >
-                {s.label} <span className="font-normal text-[10px]">↗</span>
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <figure ref={portraitRef} className="bg-gray p-3 w-full md:w-auto shrink-0 overflow-hidden" data-reveal>
-          <img 
-            ref={portraitImgRef}
-            src={data.images.portrait} 
-            alt="Portrait" 
-            className="w-full md:max-w-xs aspect-3/4 object-cover"
-          />
-          <figcaption className="flex justify-between gap-3 pt-2.5 text-[10.5px] tracking-[0.12em] uppercase text-muted">
-            <span>{data.about.portraitCaption[0]}</span>
-            <span>{data.about.portraitCaption[1]}</span>
-          </figcaption>
-        </figure>
-      </div>
-
-      <div className="mt-20 lg:mt-32 relative">
-        <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-muted before:content-[''] before:w-6 before:h-px before:bg-accent" data-reveal>
-          {data.about.journeyTitle}
-        </div>
-        
-        <div 
-          ref={contentRef}
-          className={`mt-8 border-t border-line relative overflow-hidden transition-[max-height] duration-700 ease-in-out ${
-            !showAll && needsExpansion ? "max-h-130" : "max-h-[8000px]"
+      {/* Editorial Navigation Tabs */}
+      <div className="flex items-center gap-8 mb-10 border-b border-line" data-reveal>
+        <button 
+          onClick={() => handleTabChange('about')}
+          className={`relative pb-4 text-[11px] tracking-[0.18em] uppercase transition-colors hover:text-ink cursor-pointer ${
+            activeTab === 'about' ? 'text-ink font-semibold' : 'text-muted'
           }`}
         >
-          {data.about.journey.map((j, i) => (
-            <JourneyRow 
-              key={i} 
-              j={j} 
-              i={i} 
-            />
-          ))}
-
-          {!showAll && needsExpansion && (
-            <>
-              <div className="absolute bottom-0 left-0 w-full h-48 bg-linear-to-t from-background to-transparent pointer-events-none z-10" />
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20">
-                <button 
-                  onClick={() => setShowAll(true)}
-                  className="border border-ink bg-background text-ink px-7 py-3 text-[11px] tracking-[0.16em] uppercase font-semibold transition-colors hover:bg-ink hover:text-background cursor-pointer shadow-md"
-                >
-                  See all
-                </button>
-              </div>
-            </>
+          Me
+          {activeTab === 'about' && (
+            <span className="absolute -bottom-[1px] left-0 w-full h-px bg-ink" />
           )}
-        </div>
+        </button>
+        
+        <button 
+          onClick={() => handleTabChange('journey')}
+          className={`relative pb-4 text-[11px] tracking-[0.18em] uppercase transition-colors hover:text-ink cursor-pointer ${
+            activeTab === 'journey' ? 'text-ink font-semibold' : 'text-muted'
+          }`}
+        >
+          Journey So Far
+          {activeTab === 'journey' && (
+            <span className="absolute -bottom-[1px] left-0 w-full h-px bg-ink" />
+          )}
+        </button>
+      </div>
 
-        {showAll && needsExpansion && (
-          <div className="flex justify-center mt-10">
-            <button 
-              onClick={() => {
-                setShowAll(false);
-                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="text-[11px] tracking-[0.16em] uppercase text-muted border-b border-transparent hover:border-muted transition-colors pb-1 cursor-pointer"
-            >
-              Show less
-            </button>
+      {/* Content Container */}
+      <div className={`transition-opacity duration-300 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+        
+        {activeTab === 'about' ? (
+          <div className="flex flex-col md:flex-row justify-between gap-12 lg:gap-20 items-start mt-4">
+            
+            <div className="text-ink flex-1 w-full">
+              <h2 className="font-[IBM_Plex_Mono] font-bold tracking-tight leading-none text-4xl md:text-5xl lg:text-6xl mb-8">
+                {data.about.title}
+              </h2>
+              <div className="flex flex-col gap-5">
+                {data.about.body.map((p, i) => (
+                  <p key={i} className="max-w-[56ch] text-body text-base md:text-[1.1rem] leading-relaxed" dangerouslySetInnerHTML={{ __html: p }} />
+                ))}
+              </div>
+
+              {/* Social Links Buttons */}
+              <div className="flex flex-wrap gap-4 mt-10">
+                {data.socials.map((s, i) => (
+                  <a 
+                    key={i} 
+                    href={s.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="border border-line text-ink px-5 py-2.5 text-[10px] tracking-[0.18em] uppercase font-semibold transition-colors hover:bg-ink hover:text-background flex items-center gap-2"
+                  >
+                    {s.label} <span className="font-normal text-[10px]">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            {/* Minimal Window Application Style Portrait */}
+            <figure ref={portraitRef} className="border border-line w-full md:w-[320px] shrink-0 flex flex-col bg-bone">
+              {/* Minimal Top Title Bar */}
+              <div className="h-8 border-b border-line flex items-center justify-center">
+                <span className="text-[9px] tracking-[0.2em] uppercase text-muted font-medium">
+                  {data.about.portraitCaption[0] || 'PORTRAIT.JPG'}
+                </span>
+              </div>
+              
+              {/* Image without rounded corners */}
+              <div className="relative overflow-hidden w-full bg-line">
+                <img 
+                  ref={portraitImgRef}
+                  src={data.images.portrait} 
+                  alt="Portrait" 
+                  className="w-full aspect-[4/5] object-cover block"
+                />
+              </div>
+
+              {/* Minimal Bottom Status Bar */}
+              {data.about.portraitCaption[1] && (
+                <div className="h-8 border-t border-line flex items-center justify-between px-4 bg-bone">
+                  <span className="text-[9px] tracking-[0.15em] uppercase text-muted">Status</span>
+                  <span className="text-[9px] tracking-[0.15em] uppercase text-ink">
+                    {data.about.portraitCaption[1]}
+                  </span>
+                </div>
+              )}
+            </figure>
+            
           </div>
+        ) : (
+          <JourneyView data={data} />
         )}
       </div>
     </section>

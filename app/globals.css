@@ -4,13 +4,13 @@
    Prefixing with --color-* and --spacing-* allows Tailwind v4 
    to automatically generate classes like `bg-background`, `text-ink`, or `px-pad`. */
 @theme {
-  --color-background: #F6F5F2;
-  --color-ink: #141412;
-  --color-body: #3C3B37;
-  --color-muted: #75736D;
-  --color-line: rgba(20, 20, 18, 0.14);
-  --color-bone: #ECEAE3;
-  --color-gray: #DEDDD8;
+  --color-background: #FFFFFF;
+  --color-ink: #111111;
+  --color-body: #333333;
+  --color-muted: #666666;
+  --color-line: rgba(17, 17, 17, 0.12);
+  --color-bone: #F5F5F3;
+  --color-gray: #EBEBE8;
   --color-accent: #E8401C;
 
   --spacing-nav-h: 64px;
@@ -22,8 +22,6 @@
    HTML tag resets, pseudo-selectors, and responsive CSS variables. */
 @layer base {
   :root {
-    /* Mapping your custom tokens back to the raw variables so your 
-       existing React components using `var(--background)` etc., don't break. */
     --background: var(--color-background);
     --ink: var(--color-ink);
     --body: var(--color-body);
@@ -60,17 +58,17 @@
 
   ::selection {
     background-color: var(--accent);
-    color: var(--background);
+    color: #ffffff;
   }
 }
 
 /* 3. UTILITY CLASSES
-   Custom classes and attributes used specifically for styling/JS states. */
+   Card themes dynamically swapping between crisp pure white, bone, neutral gray, and ink dark cards. */
 @layer utilities {
-  .t-paper { --card-bg: var(--background);   --card-ink: var(--ink); --card-line: rgba(20,20,18,.16);  --card-mut: #6E6C66; }
-  .t-bone  { --card-bg: var(--bone); --card-ink: var(--ink); --card-line: rgba(20,20,18,.16);  --card-mut: #6E6C66; }
-  .t-ink   { --card-bg: #161513;     --card-ink: #F2F1EC;    --card-line: rgba(242,241,236,.22); --card-mut: #A09E93; }
-  .t-gray  { --card-bg: var(--gray); --card-ink: var(--ink); --card-line: rgba(20,20,18,.18);  --card-mut: #6E6C66; }
+  .t-paper { --card-bg: #FFFFFF;     --card-ink: #111111; --card-line: rgba(17,17,17,0.12);  --card-mut: #666666; }
+  .t-bone  { --card-bg: #F5F5F3;     --card-ink: #111111; --card-line: rgba(17,17,17,0.14);  --card-mut: #666666; }
+  .t-gray  { --card-bg: #EBEBE8;     --card-ink: #111111; --card-line: rgba(17,17,17,0.16);  --card-mut: #666666; }
+  .t-ink   { --card-bg: #111111;     --card-ink: #F9F9F8; --card-line: rgba(249,249,248,0.2); --card-mut: #999999; }
 
   /* GSAP Initial state to prevent flash before animation */
   [data-reveal] {

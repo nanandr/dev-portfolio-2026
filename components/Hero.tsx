@@ -1,73 +1,49 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { PortfolioData } from "@/types/portfolio";
-import { ArrowDown } from "lucide-react";
-import gsap from "gsap";
-import { TextPlugin } from "gsap/TextPlugin";
-
-// Register the TextPlugin
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(TextPlugin);
-}
+import logoFrames from "@/components/ascii/logo";
 
 export default function Hero({ data }: { data: PortfolioData }) {
-  const roleRef = useRef<HTMLSpanElement>(null);
+  const [currentFrame, setCurrentFrame] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const frames = logoFrames();
 
   useEffect(() => {
-    if (!data.hero.role || data.hero.role.length === 0) return;
+    if (frames.length === 0) return;
+    
+    intervalRef.current = setInterval(() => {
+      setCurrentFrame((prevFrame) => (prevFrame + 1) % frames.length);
+    }, 400);
 
-    let ctx = gsap.context(() => {
-      const tl = gsap.timeline({ repeat: -1 });
-
-      data.hero.role.forEach((roleText) => {
-        tl.to(roleRef.current, {
-          text: roleText,
-          duration: 1,
-          ease: "none",
-        })
-        .to({}, { duration: 1.5 })
-        .to(roleRef.current, {
-          text: "",
-          duration: 0.5,
-          ease: "none",
-        });
-      });
-    }, roleRef);
-
-    return () => ctx.revert();
-  }, [data.hero.role]);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [frames.length]);
 
   return (
-    <section id="hero" className="min-h-svh flex flex-col pt-16 pb-6 px-6 lg:px-14">
-      <div className="flex justify-end pt-8 w-full">
-        <span className="flex items-center gap-2 text-[10.5px] tracking-[0.14em] uppercase text-muted">
-          <i className="w-2 h-2 bg-accent animate-pulse"></i>
-          {data.meta.availability}
-        </span>
-      </div>
-
-      <div className="m-auto flex flex-col items-center gap-4" data-reveal>
-        <img 
-          src={data.images.avatar} 
-          alt="avatar icon" 
-          className="w-24 h-24 object-contain grayscale active:scale-90" 
-        />
-        <span className="text-[18px] font-medium font-[IBM_Plex_Mono] tracking-tight text-ink">
-          {data.meta.handle}
-        </span>
-      </div>
-
-      <div className="flex flex-wrap justify-between gap-y-2.5 gap-x-6 border-t border-line pt-3.5 w-full text-[11.5px] tracking-[0.14em] uppercase text-muted">
-        {/* Typing Effect Container */}
-        <div className="flex items-center">
-          <span ref={roleRef}></span>
-          {/* Blinking Cursor */}
-          <span className="w-[1.5px] h-3 ml-0.5 bg-accent animate-pulse"></span>
-        </div>
+    <section id="hero" className="min-h-svh flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 bg-white font-mono text-ink">
+      
+      {/* Application Window */}
+      <div className="w-full max-w-5xl border border-line bg-bone flex flex-col shadow-sm">
         
-        <span className="flex items-center gap-2 animate-pulse">
-          Scroll <ArrowDown size={12}/>
-        </span>
+        {/* Titlebar */}
+        <div className="flex items-center justify-center px-4 py-2.5 border-b border-line bg-gray text-xs text-muted select-none">
+          <span className="font-semibold tracking-wider">
+            {data.meta.handle}
+          </span>
+        </div>
+
+        {/* Terminal Content Area */}
+        <div className="p-6 md:p-10 flex flex-col items-center justify-center overflow-x-auto min-h-[450px] bg-white">
+          <pre className="whitespace-pre text-left text-[7px] sm:text-[9px] md:text-[11px] lg:text-[13px] leading-[1.05] text-ink">
+            {frames[currentFrame] || frames[0]}
+          </pre>
+        </div>
+
       </div>
+
     </section>
   );
 }
