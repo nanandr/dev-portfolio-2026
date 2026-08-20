@@ -3,8 +3,12 @@ const DEBUG_MODE = false;
 
 export async function getPortfolio() {
   if (DEBUG_MODE) {
-    const data = await import('./data.json');
-    return data.default;
+    try {
+      const data = await import("./data.json");
+      return data.default;
+    } catch (error) {
+      console.warn("Local data.json not found, falling back to remote data.");
+    }
   }
 
   if (!PORTFOLIO_URL) {
