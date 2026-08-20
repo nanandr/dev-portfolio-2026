@@ -1,14 +1,18 @@
+import { existsSync, readFileSync } from "fs";
+import path from "path";
+
 const PORTFOLIO_URL = process.env.NEXT_PUBLIC_PORTFOLIO_URL;
 const DEBUG_MODE = false;
 
 export async function getPortfolio() {
   if (DEBUG_MODE) {
-    try {
-      const data = await import("./data.json");
-      return data.default;
-    } catch (error) {
-      console.warn("Local data.json not found, falling back to remote data.");
+    const dataPath = path.join(process.cwd(), "lib", "data.json");
+
+    if (existsSync(dataPath)) {
+      return JSON.parse(readFileSync(dataPath, "utf-8"));
     }
+
+    console.warn("Local data.json not found, falling back to remote data.");
   }
 
   if (!PORTFOLIO_URL) {
