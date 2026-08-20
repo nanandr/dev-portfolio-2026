@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/lib/data.json
 
 # next.js
 /.next/

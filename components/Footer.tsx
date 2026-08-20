@@ -17,7 +17,7 @@ export default function Footer({ data }: { data: PortfolioData }) {
   }, []);
 
   return (
-    <footer className="bg-gray border-t border-line px-6 lg:px-14 pt-8 pb-10 flex flex-wrap gap-y-4 gap-x-9 items-center justify-between text-xs text-muted relative z-50">
+    <footer className="border-t border-line px-6 lg:px-14 pt-8 pb-[25vh] flex flex-wrap gap-y-4 gap-x-9 items-center justify-between text-xs text-muted relative z-50">
       <div>
         © {new Date().getFullYear()} · {data.meta.location} · <span>{time}</span> WIB
       </div>

@@ -1,6 +1,12 @@
 const PORTFOLIO_URL = process.env.NEXT_PUBLIC_PORTFOLIO_URL;
+const DEBUG_MODE = false;
 
 export async function getPortfolio() {
+  if (DEBUG_MODE) {
+    const data = await import('./data.json');
+    return data.default;
+  }
+
   if (!PORTFOLIO_URL) {
     throw new Error("Missing NEXT_PUBLIC_PORTFOLIO_URL");
   }
