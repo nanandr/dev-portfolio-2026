@@ -15,7 +15,7 @@ export default function Stack({ data }: { data: PortfolioData }) {
   });
 
   return (
-    <section id="stack" className="relative z-50 bg-[var(--bg)] py-[10vh] px-[var(--pad)]">
+    <section id="stack" className="relative z-50 bg-background py-[10vh] px-[var(--pad)]">
       
       {/* Header retained exactly as requested */}
       <div className="flex items-center gap-2.5 text-[11px] tracking-[0.18em] uppercase text-[var(--muted)] before:content-[''] before:w-6 before:h-[1px] before:bg-[var(--accent)]" data-reveal>

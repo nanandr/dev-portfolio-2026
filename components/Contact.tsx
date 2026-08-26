@@ -121,17 +121,17 @@ export default function Contact({ data }: { data: PortfolioData }) {
       
       <button 
         onClick={handleCopy} 
-        className="flex flex-col lg:flex-row lg:items-center gap-6 md:gap-12 mt-10 md:mt-16 w-max max-w-full group cursor-pointer text-left appearance-none bg-transparent border-none p-0" 
+        className="flex flex-row items-center gap-6 md:gap-12 mt-10 md:mt-16 w-max max-w-full group cursor-pointer text-left appearance-none bg-transparent border-none p-0" 
         data-reveal
       >
         {/* LET'S CHAT ASCII art */}
-        <pre className="whitespace-pre text-left text-[5px] sm:text-[7px] md:text-[9.5px] lg:text-[11px] leading-[1.02] font-mono text-ink group-hover:text-accent transition-colors">
+        <pre className="whitespace-pre text-left text-[8px] sm:text-lg leading-[1.02] font-mono text-ink group-hover:text-accent transition-colors">
           {chatFrames[chatFrame] || chatFrames[chatFrames.length - 1]}
         </pre>
         
         {/* ASCII Arrow Container */}
         <div className="flex items-center justify-center p-2 transition-transform duration-500 ease-out group-hover:translate-x-6">
-          <pre className="whitespace-pre text-left text-[9px] sm:text-[11px] md:text-[13px] leading-[1.05] font-mono font-bold text-ink group-hover:text-accent transition-colors">
+          <pre className="whitespace-pre text-left text-[8px] sm:text-lg leading-[1.05] font-mono font-bold text-ink group-hover:text-accent transition-colors">
             {frames[currentFrame] || frames[0]}
           </pre>
         </div>
