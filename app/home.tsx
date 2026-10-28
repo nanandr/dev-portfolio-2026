@@ -46,12 +46,6 @@ export default function Home({ data }: { data:PortfolioData }) {
       <Navbar data={data}/>
       <main className="relative z-10">
         <Hero data={data} />
-        <About data={data} />
-        <Projects data={data} />
-        <div className="mt-[-80vh]">
-          <Stack data={data} />
-          <Contact data={data} />
-        </div>
       </main>
       <Footer data={data}/>
     </>

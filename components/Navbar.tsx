@@ -22,7 +22,7 @@ export default function Navbar({ data }: { data: PortfolioData }) {
         <img src={data.images.avatar} className="w-8 h-8 object-contain" />
       </a>
       <nav>
-        <ul className="flex gap-2 md:gap-4 list-none">
+        {/* <ul className="flex gap-2 md:gap-4 list-none">
           {data.nav.map((item, idx) => (
             <li key={idx}>
               <a
@@ -30,11 +30,10 @@ export default function Navbar({ data }: { data: PortfolioData }) {
                 className="text-[11px] tracking-[0.16em] uppercase hover:bg-ink active:scale-95 hover:text-white text-ink px-2 py-1.5 relative group transition-colors"
               >
                 {item.label}
-                {/* <span className="absolute left-0 bottom-0 w-full h-px bg-accent scale-x-0 origin-right transition-transform duration-300 group-hover:scale-x-100 group-hover:origin-left"></span> */}
               </a>
             </li>
           ))}
-        </ul>
+        </ul> */}
       </nav>
     </header>
   );

@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             playsInline
             className="w-full h-full object-cover"
           >
-            <source src="https://ik.imagekit.io/nanandr/portfolio/17077-278405114_medium.mp4" type="video/mp4" />
+            {/* <source src="https://ik.imagekit.io/nanandr/portfolio/17077-278405114_medium.mp4" type="video/mp4" /> */}
           </video>
         </div>
 
